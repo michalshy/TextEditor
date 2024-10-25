@@ -17,19 +17,19 @@ pub struct Position {
 }
 pub struct Terminal {}
 impl Terminal {
-    pub fn terminate() -> Result<(), std::io::Error> {
+    pub fn terminate() -> Result<(), Error> {
         Self::execute()?;
         disable_raw_mode()?;
         Ok(())
     }
-    pub fn initialize() -> Result<(), std::io::Error> {
+    pub fn initialize() -> Result<(), Error> {
         enable_raw_mode()?;
         Self::clear_screen()?;
         Self::move_cursor_to(Position{ x: 0, y: 0 })?;
         Self::execute()?;
         Ok(())
     }
-    pub fn clear_screen() -> Result<(), std::io::Error> {
+    pub fn clear_screen() -> Result<(), Error> {
         queue!(stdout(), Clear(ClearType::All))?;
         Ok(())
     }
