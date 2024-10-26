@@ -11,9 +11,6 @@ use view::View;
 mod view;
 mod terminal;
 
-const NAME: &str = env!("CARGO_PKG_NAME");
-const VERSION: &str = env!("CARGO_PKG_VERSION");
-
 #[derive(Copy, Clone, Default)]
 struct Location {
     x: usize,
@@ -109,7 +106,7 @@ impl Editor {
             Terminal::clear_screen()?;
             Terminal::print("Goodbye.\r\n")?;
         } else {
-            self.view.render();
+            self.view.render()?;
             Terminal::move_caret_to(Position {
                 col: self.location.x,
                 row: self.location.y,
