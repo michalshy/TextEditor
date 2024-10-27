@@ -4,7 +4,7 @@ use crossterm::event::{
     Event::{self, Key},
     KeyCode, KeyEvent, KeyEventKind, KeyModifiers,
 };
-use std::io::Error;
+use std::{env,io::Error};
 use terminal::{Terminal, Size, Position};
 use view::View;
 
@@ -25,15 +25,16 @@ pub struct Editor {
 }
 
 impl Editor {
-    pub fn run(&mut self) {
+    pub fn run(&mut self, path: Option<&String>) {
         Terminal::initialize().unwrap();
-        let result = self.repl();
+        self.handle_args();
+        let result = self.repl(path);
         Terminal::terminate().unwrap();
         result.unwrap();
     }
-    fn repl(&mut self) -> Result<(), Error> {
+    fn repl(&mut self, path: Option<&String>) -> Result<(), Error> {
         loop {
-            self.refresh_screen()?;
+            self.refresh_screen(path)?;
             if self.should_quit {
                 break;
             }
@@ -99,7 +100,7 @@ impl Editor {
         }
         Ok(())
     }
-    fn refresh_screen(&self) -> Result<(), Error> {
+    fn refresh_screen(&self, path: Option<&String>) -> Result<(), Error> {
         Terminal::hide_caret()?;
         Terminal::move_caret_to(Position::default())?;
         if self.should_quit {
@@ -115,5 +116,11 @@ impl Editor {
         Terminal::show_caret()?;
         Terminal::execute()?;
         Ok(())
+    }
+    fn handle_args(&mut self) {
+        let args: Vec<String> = env::args().collect();
+        if let Some(file_name) = args.get(1) {
+            self.view.load(file_name);
+        }
     }
 }

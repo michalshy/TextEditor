@@ -4,5 +4,10 @@ use editor::Editor;
 
 mod editor;
 fn main() {
-    Editor::default().run();
+    let args: Vec<String> = std::env::args().collect();
+    if let Some(first_arg) = args.get(1) {
+        Editor::default().run(Some(first_arg));
+    } else {
+        Editor::default().run(None);
+    }
 }
