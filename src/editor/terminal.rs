@@ -5,7 +5,7 @@ use crossterm::style::Print;
 use crossterm::{queue, Command};
 
 
-#[derive(Copy, Clone)]
+#[derive(Default, Copy, Clone)]
 pub struct Size {
     pub height: usize,
     pub width: usize,
